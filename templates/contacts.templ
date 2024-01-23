@@ -1,5 +1,34 @@
 package templates
 
-templ Contacts() {
-	<h1>Contacts App</h1>
+import "contact.app/model"
+import "fmt"
+
+templ Contacts(contacts []model.Contact) {
+	@Layout() {
+		<table>
+			<thead>
+				<tr>
+					<th>First</th>
+					<th>Last</th>
+					<th>Phone</th>
+					<th>Email</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				for _, contact := range contacts {
+					<tr>
+						<td>{  contact.First  }</td>
+						<td>{ contact.Last } </td>
+						<td>{ contact.Phone } </td>
+						<td>{ contact.Email }</td>
+						<td>
+							<a href={ templ.URL(fmt.Sprintf("/contacts/%d/edit", contact.Id)) }>Edit</a>
+							<a href={ templ.URL(fmt.Sprintf("/contacts/%d", contact.Id)) }>View</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
 }

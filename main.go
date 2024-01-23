@@ -5,6 +5,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
+	"contact.app/model"
 	"contact.app/templates"
 	"contact.app/utils"
 )
@@ -28,5 +29,11 @@ func (h Handler) RedirectToContacts(c echo.Context) error {
 }
 
 func (h Handler) ContactsView(c echo.Context) error {
-	return utils.Render(c, templates.Contacts())
+
+	contacts := []model.Contact{
+		{Id: 1, First: "John", Last: "Doe", Phone: "555-555-5555", Email: "johndoe@email.com"},
+		{Id: 2, First: "Jane", Last: "Doe", Phone: "555-555-5555", Email: "janedoe@email.com"},
+	}
+
+	return utils.Render(c, templates.Contacts(contacts))
 }
