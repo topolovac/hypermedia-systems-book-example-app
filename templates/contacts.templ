@@ -3,8 +3,13 @@ package templates
 import "contact.app/model"
 import "fmt"
 
-templ Contacts(contacts []model.Contact) {
+templ Contacts(contacts []model.Contact, search_param string) {
 	@Layout() {
+		<form action="/contacts" method="GET">
+			<label for="search">Search Term</label>
+			<input id="search" type="search" name="search" value={ search_param }/>
+			<input type="submit" value="Search"/>
+		</form>
 		<table>
 			<thead>
 				<tr>
@@ -30,5 +35,8 @@ templ Contacts(contacts []model.Contact) {
 				}
 			</tbody>
 		</table>
+		<p>
+			<a href="/contacts/new">Add Contact</a>
+		</p>
 	}
 }

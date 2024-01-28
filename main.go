@@ -55,5 +55,5 @@ func (h Handler) ContactsView(c echo.Context) error {
 	} else {
 		contacts = h.contact_service.All()
 	}
-	return utils.Render(c, templates.Contacts(contacts))
+	return utils.Render(c, templates.Contacts(contacts, search))
 }
