@@ -28,13 +28,15 @@ func main() {
 		Contacts: contacts,
 	}
 
-	handler := Handler{
+	handler := &Handler{
 		contact_service: cs,
 	}
 
 	e.GET("/", handler.RedirectToContacts)
 
 	e.GET("/contacts", handler.ContactsView)
+
+	e.GET("/contacts/new", handler.NewContactView)
 
 	e.Start(":3000")
 }
@@ -43,11 +45,11 @@ type Handler struct {
 	contact_service *services.ContactService
 }
 
-func (h Handler) RedirectToContacts(c echo.Context) error {
+func (h *Handler) RedirectToContacts(c echo.Context) error {
 	return c.Redirect(http.StatusMovedPermanently, "/contacts")
 }
 
-func (h Handler) ContactsView(c echo.Context) error {
+func (h *Handler) ContactsView(c echo.Context) error {
 	search := c.QueryParam("search")
 	var contacts []model.Contact
 	if search != "" {
@@ -56,4 +58,20 @@ func (h Handler) ContactsView(c echo.Context) error {
 		contacts = h.contact_service.All()
 	}
 	return utils.Render(c, templates.Contacts(contacts, search))
+}
+
+func (h *Handler) NewContactView(c echo.Context) error {
+	contact := model.Contact{
+		First: "",
+		Last:  "",
+		Phone: "",
+		Email: "",
+	}
+	errors := templates.FormErrors{
+		First: "",
+		Last:  "",
+		Phone: "",
+		Email: "",
+	}
+	return utils.Render(c, templates.NewContactView(contact, errors))
 }
