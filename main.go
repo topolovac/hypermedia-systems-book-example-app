@@ -49,6 +49,9 @@ func main() {
 
 	e.GET("/contacts/:id", handler.ContactDetailView)
 
+	e.RouteNotFound("/", handler.NotFoundView)
+	e.RouteNotFound("/*", handler.NotFoundView)
+
 	err := e.Start(":3000")
 	if err != nil {
 		log.Panic(err)
