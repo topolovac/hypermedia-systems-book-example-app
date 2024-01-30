@@ -1,22 +1,33 @@
 package templates
 
-import "contact.app/model"
-
-type FormErrors struct {
-	Email string
-	First string
-	Last  string
-	Phone string
+type NewContactForm struct {
+	Email string `form:"email"`
+	First string `form:"first_name"`
+	Last  string `form:"last_name"`
+	Phone string `form:"phone"`
 }
 
-templ NewContactView(contact model.Contact, errors FormErrors) {
+type FormErrors struct {
+	Email   string
+	First   string
+	Last    string
+	Phone   string
+	Generic string
+}
+
+func (fe *FormErrors) HasErrors() bool {
+	return fe.First != "" || fe.Last != "" || fe.Phone != "" || fe.Email != "" || fe.Generic != ""
+}
+
+templ NewContactView(contact *NewContactForm, errors FormErrors) {
 	@Layout() {
 		<form action="/contacts/new" method="post">
 			<fieldset>
 				<legend>Contact Values</legend>
+				<h5 class="error">{ errors.Generic }</h5>
 				<p>
 					<label for="email">Email</label>
-					<input name="email" id="email" type="email" placeholder="Email" value={ contact.Email }/>
+					<input name="email" id="email" type="text" placeholder="Email" value={ contact.Email }/>
 					<span class="error">{ errors.Email }</span>
 				</p>
 				<p>
@@ -31,7 +42,7 @@ templ NewContactView(contact model.Contact, errors FormErrors) {
 				</p>
 				<p>
 					<label for="phone">Phone</label>
-					<input name="phone" id="phone" type="text" placeholder="Phone" value={ contact.Phone }/>
+					<input name="phone" id="phone" type="number" placeholder="Phone" value={ contact.Phone }/>
 					<span class="error">{ errors.Phone }</span>
 				</p>
 				<button>Save</button>

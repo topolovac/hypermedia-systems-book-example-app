@@ -27,3 +27,7 @@ func (c *ContactService) Search(search_param string) []model.Contact {
 func (c *ContactService) All() []model.Contact {
 	return c.Contacts
 }
+
+func (c *ContactService) Add(contact model.Contact) {
+	c.Contacts = append(c.Contacts, contact)
+}

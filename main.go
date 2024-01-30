@@ -1,14 +1,16 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"net/http"
-
-	"github.com/labstack/echo/v4"
 
 	"contact.app/model"
 	"contact.app/services"
 	"contact.app/templates"
 	"contact.app/utils"
+	"github.com/go-playground/form"
+	"github.com/labstack/echo/v4"
 )
 
 func main() {
@@ -30,6 +32,7 @@ func main() {
 
 	handler := &Handler{
 		contact_service: cs,
+		decoder:         form.NewDecoder(),
 	}
 
 	e.GET("/", handler.RedirectToContacts)
@@ -38,11 +41,17 @@ func main() {
 
 	e.GET("/contacts/new", handler.NewContactView)
 
-	e.Start(":3000")
+	e.POST("/contacts/new", handler.NewContactView)
+
+	err := e.Start(":3000")
+	if err != nil {
+		log.Panic(err)
+	}
 }
 
 type Handler struct {
 	contact_service *services.ContactService
+	decoder         *form.Decoder
 }
 
 func (h *Handler) RedirectToContacts(c echo.Context) error {
@@ -61,17 +70,46 @@ func (h *Handler) ContactsView(c echo.Context) error {
 }
 
 func (h *Handler) NewContactView(c echo.Context) error {
-	contact := model.Contact{
-		First: "",
-		Last:  "",
-		Phone: "",
-		Email: "",
+	contact := &templates.NewContactForm{}
+	errors := templates.FormErrors{}
+
+	if c.Request().Method == http.MethodPost {
+		values, err := c.FormParams()
+		if err != nil {
+			log.Panic(err)
+			return c.Redirect(http.StatusUnprocessableEntity, c.Path())
+		}
+
+		err = h.decoder.Decode(&contact, values)
+
+		if err != nil {
+			log.Panic(err)
+			return c.Redirect(http.StatusUnprocessableEntity, c.Path())
+		}
+
+		if contact.First == "" {
+			errors.First = "Please enter first name"
+		}
+		if contact.Last == "" {
+			errors.Last = "Please enter last name"
+		}
+		if contact.Phone == "" {
+			errors.Phone = "Please enter phone number"
+		}
+		if contact.Email == "" || !utils.IsEmail(contact.Email) {
+			errors.Email = "Please enter valid email"
+		}
+
+		if !errors.HasErrors() {
+			h.contact_service.Add(model.Contact{
+				First: contact.First,
+				Last:  contact.Last,
+				Phone: contact.Phone,
+				Email: contact.Email,
+			})
+			return h.RedirectToContacts(c)
+		}
 	}
-	errors := templates.FormErrors{
-		First: "",
-		Last:  "",
-		Phone: "",
-		Email: "",
-	}
+	
 	return utils.Render(c, templates.NewContactView(contact, errors))
 }

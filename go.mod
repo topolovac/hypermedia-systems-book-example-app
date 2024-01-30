@@ -8,6 +8,7 @@ require (
 )
 
 require (
+	github.com/go-playground/form v3.1.4+incompatible // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
