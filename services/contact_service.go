@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"strings"
 
 	"contact.app/model"
@@ -30,4 +31,13 @@ func (c *ContactService) All() []model.Contact {
 
 func (c *ContactService) Add(contact model.Contact) {
 	c.Contacts = append(c.Contacts, contact)
+}
+
+func (c *ContactService) FindById(id int) (model.Contact, error) {
+	for _, c := range c.Contacts {
+		if c.Id == int32(id) {
+			return c, nil
+		}
+	}
+	return model.Contact{}, errors.New("contact not found")
 }

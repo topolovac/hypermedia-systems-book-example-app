@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"contact.app/model"
 	"contact.app/services"
@@ -37,11 +37,17 @@ func main() {
 
 	e.GET("/", handler.RedirectToContacts)
 
+	e.GET("/404", handler.NotFoundView)
+
+	e.GET("/oops", handler.OopsView)
+
 	e.GET("/contacts", handler.ContactsView)
 
 	e.GET("/contacts/new", handler.NewContactView)
 
 	e.POST("/contacts/new", handler.NewContactView)
+
+	e.GET("/contacts/:id", handler.ContactDetailView)
 
 	err := e.Start(":3000")
 	if err != nil {
@@ -56,6 +62,22 @@ type Handler struct {
 
 func (h *Handler) RedirectToContacts(c echo.Context) error {
 	return c.Redirect(http.StatusMovedPermanently, "/contacts")
+}
+
+func (h *Handler) RedirectToNotFound(c echo.Context) error {
+	return c.Redirect(http.StatusMovedPermanently, "/404")
+}
+
+func (h *Handler) NotFoundView(c echo.Context) error {
+	return utils.Render(c, templates.NotFound())
+}
+
+func (h *Handler) RedirectToOops(c echo.Context) error {
+	return c.Redirect(http.StatusMovedPermanently, "/oops")
+}
+
+func (h *Handler) OopsView(c echo.Context) error {
+	return utils.Render(c, templates.Oops())
 }
 
 func (h *Handler) ContactsView(c echo.Context) error {
@@ -76,14 +98,12 @@ func (h *Handler) NewContactView(c echo.Context) error {
 	if c.Request().Method == http.MethodPost {
 		values, err := c.FormParams()
 		if err != nil {
-			log.Panic(err)
 			return c.Redirect(http.StatusUnprocessableEntity, c.Path())
 		}
 
 		err = h.decoder.Decode(&contact, values)
 
 		if err != nil {
-			log.Panic(err)
 			return c.Redirect(http.StatusUnprocessableEntity, c.Path())
 		}
 
@@ -110,6 +130,20 @@ func (h *Handler) NewContactView(c echo.Context) error {
 			return h.RedirectToContacts(c)
 		}
 	}
-	
+
 	return utils.Render(c, templates.NewContactView(contact, errors))
+}
+
+func (h *Handler) ContactDetailView(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return h.RedirectToNotFound(c)
+	}
+
+	contact, err := h.contact_service.FindById(id)
+	if err != nil {
+		return h.RedirectToNotFound(c)
+	}
+
+	return utils.Render(c, templates.ContactDetail(&contact))
 }
