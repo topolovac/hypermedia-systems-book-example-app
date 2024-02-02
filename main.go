@@ -47,6 +47,8 @@ func main() {
 
 	e.POST("/contacts/:id/edit", handler.EditContactView)
 
+	e.POST("/contacts/:id/delete", handler.DeleteContact)
+
 	e.RouteNotFound("/", handler.NotFoundView)
 	e.RouteNotFound("/*", handler.NotFoundView)
 

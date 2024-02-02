@@ -39,6 +39,10 @@ templ EditContactView(contact *EditContactForm, errors FormErrors) {
 				<button type="submit">Save</button>
 			</fieldset>
 		</form>
+		<br/>
+		<form action={ templ.URL(fmt.Sprintf("/contacts/%s/delete", contact.Id)) } method="post">
+			<button>Delete Contact</button>
+		</form>
 		<p>
 			<a href="/contacts">Back</a>
 		</p>

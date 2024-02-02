@@ -51,3 +51,13 @@ func (c *ContactService) Update(new_contact model.Contact) error {
 	}
 	return errors.New("contact not found")
 }
+
+func (c *ContactService) Delete(id int) error {
+	for i, contact := range c.Contacts {
+		if contact.Id == int32(id) {
+			c.Contacts = append(c.Contacts[:i], c.Contacts[i+1:]...)
+			return nil
+		}
+	}
+	return errors.New("contact not found")
+}

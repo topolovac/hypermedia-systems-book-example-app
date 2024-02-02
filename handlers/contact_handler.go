@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -135,8 +134,7 @@ func (h *ContactsHandler) EditContactView(c echo.Context) error {
 		Last:  existing_contact.Last,
 		Phone: existing_contact.Phone,
 	}
-	method := c.Request().Method
-	fmt.Println(method)
+
 	if c.Request().Method == http.MethodPost {
 		values, err := c.FormParams()
 		if err != nil {
@@ -178,4 +176,18 @@ func (h *ContactsHandler) EditContactView(c echo.Context) error {
 	}
 
 	return utils.Render(c, templates.EditContactView(contact, errors))
+}
+
+func (h *ContactsHandler) DeleteContact(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return h.RedirectToNotFound(c)
+	}
+
+	err = h.contact_service.Delete(id)
+	if err != nil {
+		return h.RedirectToNotFound(c)
+	}
+
+	return h.RedirectToContacts(c)
 }
