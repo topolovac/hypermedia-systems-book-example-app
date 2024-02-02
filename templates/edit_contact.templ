@@ -1,0 +1,46 @@
+package templates
+
+import "fmt"
+
+type EditContactForm struct {
+	Id    string
+	Email string `form:"email"`
+	First string `form:"first_name"`
+	Last  string `form:"last_name"`
+	Phone string `form:"phone"`
+}
+
+templ EditContactView(contact *EditContactForm, errors FormErrors) {
+	@Layout() {
+		<form action={ templ.URL(fmt.Sprintf("/contacts/%s/edit", contact.Id)) } method="post">
+			<fieldset>
+				<legend>Edit { fmt.Sprintf("%s %s", contact.First, contact.Last) }</legend>
+				<h5 class="error">{ errors.Generic }</h5>
+				<p>
+					<label for="email">Email</label>
+					<input name="email" id="email" type="text" placeholder="Email" value={ contact.Email }/>
+					<span class="error">{ errors.Email }</span>
+				</p>
+				<p>
+					<label for="first_name">First Name</label>
+					<input name="first_name" id="first_name" type="text" placeholder="First Name" value={ contact.First }/>
+					<span class="error">{ errors.First }</span>
+				</p>
+				<p>
+					<label for="last_name">Last Name</label>
+					<input name="last_name" id="last_name" type="text" placeholder="Last Name" value={ contact.Last }/>
+					<span class="error">{ errors.Last }</span>
+				</p>
+				<p>
+					<label for="phone">Phone</label>
+					<input name="phone" id="phone" type="text" placeholder="Phone" value={ contact.Phone }/>
+					<span class="error">{ errors.Phone }</span>
+				</p>
+				<button type="submit">Save</button>
+			</fieldset>
+		</form>
+		<p>
+			<a href="/contacts">Back</a>
+		</p>
+	}
+}

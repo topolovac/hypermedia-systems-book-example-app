@@ -43,6 +43,10 @@ func main() {
 
 	e.GET("/contacts/:id", handler.ContactDetailView)
 
+	e.GET("/contacts/:id/edit", handler.EditContactView)
+
+	e.POST("/contacts/:id/edit", handler.EditContactView)
+
 	e.RouteNotFound("/", handler.NotFoundView)
 	e.RouteNotFound("/*", handler.NotFoundView)
 

@@ -41,3 +41,13 @@ func (c *ContactService) FindById(id int) (model.Contact, error) {
 	}
 	return model.Contact{}, errors.New("contact not found")
 }
+
+func (c *ContactService) Update(new_contact model.Contact) error {
+	for i, contact := range c.Contacts {
+		if contact.Id == new_contact.Id {
+			c.Contacts[i] = new_contact
+			return nil
+		}
+	}
+	return errors.New("contact not found")
+}

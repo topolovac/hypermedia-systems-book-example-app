@@ -45,7 +45,7 @@ templ NewContactView(contact *NewContactForm, errors FormErrors) {
 					<input name="phone" id="phone" type="number" placeholder="Phone" value={ contact.Phone }/>
 					<span class="error">{ errors.Phone }</span>
 				</p>
-				<button>Save</button>
+				<button type="submit">Save</button>
 			</fieldset>
 		</form>
 		<p>

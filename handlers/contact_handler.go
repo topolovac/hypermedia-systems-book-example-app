@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -112,4 +113,69 @@ func (h *ContactsHandler) ContactDetailView(c echo.Context) error {
 	}
 
 	return utils.Render(c, templates.ContactDetail(&contact))
+}
+
+func (h *ContactsHandler) EditContactView(c echo.Context) error {
+	errors := templates.FormErrors{}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return h.RedirectToNotFound(c)
+	}
+
+	existing_contact, err := h.contact_service.FindById(id)
+	if err != nil {
+		return h.RedirectToNotFound(c)
+	}
+
+	contact := &templates.EditContactForm{
+		Id:    strconv.Itoa(int(existing_contact.Id)),
+		Email: existing_contact.Email,
+		First: existing_contact.First,
+		Last:  existing_contact.Last,
+		Phone: existing_contact.Phone,
+	}
+	method := c.Request().Method
+	fmt.Println(method)
+	if c.Request().Method == http.MethodPost {
+		values, err := c.FormParams()
+		if err != nil {
+			return c.Redirect(http.StatusUnprocessableEntity, c.Path())
+		}
+
+		err = h.decoder.Decode(&contact, values)
+
+		if err != nil {
+			return c.Redirect(http.StatusUnprocessableEntity, c.Path())
+		}
+
+		if contact.First == "" {
+			errors.First = "Please enter first name"
+		}
+		if contact.Last == "" {
+			errors.Last = "Please enter last name"
+		}
+		if contact.Phone == "" {
+			errors.Phone = "Please enter phone number"
+		}
+		if contact.Email == "" || !utils.IsEmail(contact.Email) {
+			errors.Email = "Please enter valid email"
+		}
+
+		if !errors.HasErrors() {
+			err := h.contact_service.Update(model.Contact{
+				Id:    existing_contact.Id,
+				First: contact.First,
+				Last:  contact.Last,
+				Phone: contact.Phone,
+				Email: contact.Email,
+			})
+			if err != nil {
+				return h.RedirectToOops(c)
+			}
+			return h.RedirectToContacts(c)
+		}
+	}
+
+	return utils.Render(c, templates.EditContactView(contact, errors))
 }
