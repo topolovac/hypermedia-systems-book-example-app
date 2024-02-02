@@ -11,3 +11,10 @@ In book Python is used as programming language but I chose Golang with [Templ](h
 Run app with: `make`
 
 Hot reload mode with: `make hot`
+
+## TODO LIST:
+
+- basic functionality from book
+- add flash message with context
+- refactor everything by LetsGo book style (optional)
+- add tailwind and some style (optional)
