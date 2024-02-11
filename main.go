@@ -29,6 +29,8 @@ func main() {
 
 	handler := handlers.NewContactsHandler(cs)
 
+	e.Static("/static", "static")
+
 	e.GET("/", handler.RedirectToContacts)
 
 	e.GET("/404", handler.NotFoundView)
