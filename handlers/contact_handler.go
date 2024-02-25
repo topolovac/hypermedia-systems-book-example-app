@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -27,11 +28,11 @@ type ContactsHandler struct {
 }
 
 func (h *ContactsHandler) RedirectToContacts(c echo.Context) error {
-	return c.Redirect(http.StatusMovedPermanently, "/contacts")
+	return c.Redirect(http.StatusSeeOther, "/contacts")
 }
 
 func (h *ContactsHandler) RedirectToNotFound(c echo.Context) error {
-	return c.Redirect(http.StatusMovedPermanently, "/404")
+	return c.Redirect(http.StatusSeeOther, "/404")
 }
 
 func (h *ContactsHandler) NotFoundView(c echo.Context) error {
@@ -180,12 +181,15 @@ func (h *ContactsHandler) EditContactView(c echo.Context) error {
 
 func (h *ContactsHandler) DeleteContact(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
+	fmt.Println("id", id)
 	if err != nil {
+		fmt.Println("err1:", err)
 		return h.RedirectToNotFound(c)
 	}
 
 	err = h.contact_service.Delete(id)
 	if err != nil {
+		fmt.Println("err2:", err)
 		return h.RedirectToNotFound(c)
 	}
 
