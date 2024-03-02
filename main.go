@@ -51,6 +51,8 @@ func main() {
 
 	e.DELETE("/contacts/:id", handler.DeleteContact)
 
+	e.GET("/contacts/validate/email", handler.ValidateEmail)
+
 	e.RouteNotFound("/", handler.NotFoundView)
 	e.RouteNotFound("/*", handler.NotFoundView)
 

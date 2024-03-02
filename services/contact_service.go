@@ -61,3 +61,12 @@ func (c *ContactService) Delete(id int) error {
 	}
 	return errors.New("contact not found")
 }
+
+func (c *ContactService) FindByEmail(email string) (model.Contact, error) {
+	for _, contact := range c.Contacts {
+		if contact.Email == email {
+			return contact, nil
+		}
+	}
+	return model.Contact{}, errors.New("contact not found")
+}

@@ -195,3 +195,21 @@ func (h *ContactsHandler) DeleteContact(c echo.Context) error {
 
 	return h.RedirectToContacts(c)
 }
+
+func (h *ContactsHandler) ValidateEmail(c echo.Context) error {
+	email := c.QueryParam("email")
+
+	if email == "" {
+		return c.HTML(http.StatusOK, "email is required")
+	}
+
+	if _, err := h.contact_service.FindByEmail(email); err == nil {
+		return c.HTML(http.StatusOK, "email is already taken")
+	}
+
+	if !utils.IsEmail(email) {
+		return c.HTML(http.StatusOK, "email is invalid")
+	}
+
+	return c.HTML(http.StatusOK, "")
+}
