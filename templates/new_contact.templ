@@ -34,6 +34,7 @@ templ NewContactView(contact *NewContactForm, errors FormErrors) {
 						placeholder="Email"
 						value={ contact.Email }
 						hx-get="/contacts/validate/email"
+						hx-trigger="change, keyup delay:300ms changed"
 						hx-target="next .error"
 					/>
 					<span class="error">{ errors.Email }</span>
