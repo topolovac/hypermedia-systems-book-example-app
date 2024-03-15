@@ -3,7 +3,7 @@ package templates
 import "contact.app/model"
 import "fmt"
 
-templ Contacts(contacts []model.Contact, search_param string) {
+templ Contacts(contacts []model.Contact, search_param string, page int) {
 	@Layout() {
 		<form action="/contacts" method="GET">
 			<label for="search">Search Term</label>
@@ -35,6 +35,14 @@ templ Contacts(contacts []model.Contact, search_param string) {
 				}
 			</tbody>
 		</table>
+		<span>
+			if page > 1 {
+				<a href={ templ.URL(fmt.Sprintf("/contacts?page=%d", page-1)) }>Back</a>
+			}
+			if len(contacts) == 10 {
+				<a href={ templ.URL(fmt.Sprintf("/contacts?page=%d", page+1)) }>Next</a>
+			}
+		</span>
 		<p>
 			<a href="/contacts/new">Add Contact</a>
 		</p>

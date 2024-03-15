@@ -25,7 +25,15 @@ func (c *ContactService) Search(search_param string) []model.Contact {
 	return matched_contacts
 }
 
-func (c *ContactService) All() []model.Contact {
+func (c *ContactService) All(page int) []model.Contact {
+	if page > 0 {
+		start := (page - 1) * 10
+		end := page * 10
+		if end > len(c.Contacts) {
+			end = len(c.Contacts)
+		}
+		return c.Contacts[start:end]
+	}
 	return c.Contacts
 }
 

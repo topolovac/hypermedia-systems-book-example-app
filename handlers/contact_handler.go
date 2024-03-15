@@ -49,13 +49,22 @@ func (h *ContactsHandler) OopsView(c echo.Context) error {
 
 func (h *ContactsHandler) ContactsView(c echo.Context) error {
 	search := c.QueryParam("search")
+
+	page := 1
+	pp, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		page = pp
+	}
+
 	var contacts []model.Contact
 	if search != "" {
 		contacts = h.contact_service.Search(search)
 	} else {
-		contacts = h.contact_service.All()
+		contacts = h.contact_service.All(page)
 	}
-	return utils.Render(c, templates.Contacts(contacts, search))
+	return utils.Render(c, templates.Contacts(contacts, search, page))
 }
 
 func (h *ContactsHandler) NewContactView(c echo.Context) error {
