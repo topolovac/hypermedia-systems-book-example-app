@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -27,11 +28,11 @@ type ContactsHandler struct {
 }
 
 func (h *ContactsHandler) RedirectToContacts(c echo.Context) error {
-	return c.Redirect(http.StatusMovedPermanently, "/contacts")
+	return c.Redirect(http.StatusSeeOther, "/contacts")
 }
 
 func (h *ContactsHandler) RedirectToNotFound(c echo.Context) error {
-	return c.Redirect(http.StatusMovedPermanently, "/404")
+	return c.Redirect(http.StatusSeeOther, "/404")
 }
 
 func (h *ContactsHandler) NotFoundView(c echo.Context) error {
@@ -48,13 +49,22 @@ func (h *ContactsHandler) OopsView(c echo.Context) error {
 
 func (h *ContactsHandler) ContactsView(c echo.Context) error {
 	search := c.QueryParam("search")
+
+	page := 1
+	pp, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		page = pp
+	}
+
 	var contacts []model.Contact
 	if search != "" {
 		contacts = h.contact_service.Search(search)
 	} else {
-		contacts = h.contact_service.All()
+		contacts = h.contact_service.All(page)
 	}
-	return utils.Render(c, templates.Contacts(contacts, search))
+	return utils.Render(c, templates.Contacts(contacts, search, page))
 }
 
 func (h *ContactsHandler) NewContactView(c echo.Context) error {
@@ -180,14 +190,35 @@ func (h *ContactsHandler) EditContactView(c echo.Context) error {
 
 func (h *ContactsHandler) DeleteContact(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
+	fmt.Println("id", id)
 	if err != nil {
+		fmt.Println("err1:", err)
 		return h.RedirectToNotFound(c)
 	}
 
 	err = h.contact_service.Delete(id)
 	if err != nil {
+		fmt.Println("err2:", err)
 		return h.RedirectToNotFound(c)
 	}
 
 	return h.RedirectToContacts(c)
+}
+
+func (h *ContactsHandler) ValidateEmail(c echo.Context) error {
+	email := c.QueryParam("email")
+
+	if email == "" {
+		return c.HTML(http.StatusOK, "email is required")
+	}
+
+	if _, err := h.contact_service.FindByEmail(email); err == nil {
+		return c.HTML(http.StatusOK, "email is already taken")
+	}
+
+	if !utils.IsEmail(email) {
+		return c.HTML(http.StatusOK, "email is invalid")
+	}
+
+	return c.HTML(http.StatusOK, "")
 }

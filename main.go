@@ -6,28 +6,19 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"contact.app/handlers"
-	"contact.app/model"
 	"contact.app/services"
 )
 
 func main() {
 	e := echo.New()
 
-	contacts := []model.Contact{
-		{Id: 1, First: "John", Last: "Doe", Phone: "555-555-5555", Email: "johndoe@email.com"},
-		{Id: 2, First: "Jane", Last: "Doe", Phone: "555-555-5555", Email: "janedoe@email.com"},
-		{Id: 3, First: "Alice", Last: "Smith", Phone: "555-555-5555", Email: "alicesmith@email.com"},
-		{Id: 4, First: "Bob", Last: "Johnson", Phone: "555-555-5555", Email: "bobjohnson@email.com"},
-		{Id: 5, First: "Eva", Last: "Brown", Phone: "555-555-5555", Email: "evabrown@email.com"},
-		{Id: 6, First: "David", Last: "Wilson", Phone: "555-555-5555", Email: "davidwilson@email.com"},
-		{Id: 7, First: "Grace", Last: "Miller", Phone: "555-555-5555", Email: "gracemiller@email.com"},
-	}
-
 	cs := &services.ContactService{
-		Contacts: contacts,
+		Contacts: FakeContacts,
 	}
 
 	handler := handlers.NewContactsHandler(cs)
+
+	e.Static("/static", "static")
 
 	e.GET("/", handler.RedirectToContacts)
 
@@ -47,7 +38,9 @@ func main() {
 
 	e.POST("/contacts/:id/edit", handler.EditContactView)
 
-	e.POST("/contacts/:id/delete", handler.DeleteContact)
+	e.DELETE("/contacts/:id", handler.DeleteContact)
+
+	e.GET("/contacts/validate/email", handler.ValidateEmail)
 
 	e.RouteNotFound("/", handler.NotFoundView)
 	e.RouteNotFound("/*", handler.NotFoundView)

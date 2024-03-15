@@ -13,7 +13,7 @@ import "bytes"
 import "contact.app/model"
 import "fmt"
 
-func Contacts(contacts []model.Contact, search_param string) templ.Component {
+func Contacts(contacts []model.Contact, search_param string, page int) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -183,12 +183,35 @@ func Contacts(contacts []model.Contact, search_param string) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
+			if len(contacts) == 10 {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<tr><td><span hx-target=\"closest tr\" hx-swap=\"outerHTML\" hx-trigger=\"revealed\" hx-select=\"tbody &gt; tr\" hx-get=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("/contacts?page=%d", page+1)))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Var16 := `Loading more...`
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var16)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></td></tr>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table><p><a href=\"/contacts/new\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var16 := `Add Contact`
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var16)
+			templ_7745c5c3_Var17 := `Add Contact`
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var17)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

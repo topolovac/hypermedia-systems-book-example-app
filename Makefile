@@ -1,7 +1,7 @@
 run:
 	templ generate
-	@go run main.go
+	@go run main.go fake_contacts.go
 
 hot:
 	echo "Running hot reload mode"
-	templ generate --watch --proxy="http://localhost:3000" --cmd="go run main.go"
+	templ generate --watch --proxy="http://localhost:3000" --cmd="go run main.go fake_contacts.go"
