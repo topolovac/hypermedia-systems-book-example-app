@@ -34,4 +34,5 @@ var FakeContacts = []model.Contact{
 	{Id: 29, First: "Amelia", Last: "Lopez", Phone: "555-555-5555", Email: "amelialopez@email.com"},
 	{Id: 30, First: "Matthew", Last: "Hill", Phone: "555-555-5555", Email: "matthewhill@email.com"},
 	{Id: 31, First: "Samantha", Last: "Scott", Phone: "555-555-5555", Email: "samanthascott@email.com"},
+    
 }
