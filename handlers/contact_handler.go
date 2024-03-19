@@ -64,6 +64,11 @@ func (h *ContactsHandler) ContactsView(c echo.Context) error {
 	} else {
 		contacts = h.contact_service.All(page)
 	}
+
+	if c.Request().Header.Get("HX-Trigger") == "search" {
+		return utils.Render(c, templates.ContactRows(contacts))
+	}
+
 	return utils.Render(c, templates.Contacts(contacts, search, page))
 }
 

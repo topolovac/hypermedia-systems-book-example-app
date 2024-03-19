@@ -100,6 +100,11 @@ func Layout() templ.Component {
             font-size: 18px;
             color: #333;
         }
+
+		.table-container {
+			height: 300px;
+			overflow: auto;
+		}
 		`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 		if templ_7745c5c3_Err != nil {
