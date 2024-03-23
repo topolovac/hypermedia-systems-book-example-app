@@ -18,8 +18,10 @@ templ Contacts(contacts []model.Contact, search_param string, page int) {
 				hx-trigger="search, keyup delay:300ms changed"
 				hx-target="tbody"
 				hx-push-url="true"
+				hx-indicator="#spinner"
 			/>
 			<input type="submit" value="Search"/>
+			<img id="spinner" class="htmx-indicator" src="/static/img/spinning-circles.svg" alt="Request In Flight..."/>
 		</form>
 		<div class="table-container">
 			<table>

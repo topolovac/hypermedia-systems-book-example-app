@@ -51,7 +51,7 @@ func Contacts(contacts []model.Contact, search_param string, page int) templ.Com
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/contacts\" hx-trigger=\"search, keyup delay:300ms changed\" hx-target=\"tbody\" hx-push-url=\"true\"> <input type=\"submit\" value=\"Search\"></form><div class=\"table-container\"><table><thead><tr><th>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/contacts\" hx-trigger=\"search, keyup delay:300ms changed\" hx-target=\"tbody\" hx-push-url=\"true\" hx-indicator=\"#spinner\"> <input type=\"submit\" value=\"Search\"> <img id=\"spinner\" class=\"htmx-indicator\" src=\"/static/img/spinning-circles.svg\" alt=\"Request In Flight...\"></form><div class=\"table-container\"><table><thead><tr><th>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

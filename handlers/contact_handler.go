@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"contact.app/model"
 	"contact.app/services"
@@ -49,6 +50,9 @@ func (h *ContactsHandler) OopsView(c echo.Context) error {
 
 func (h *ContactsHandler) ContactsView(c echo.Context) error {
 	search := c.QueryParam("search")
+
+	// added delay to simulate slower response
+	time.Sleep(500 * time.Millisecond)
 
 	page := 1
 	pp, err := strconv.Atoi(c.QueryParam("page"))
