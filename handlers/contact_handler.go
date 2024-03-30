@@ -215,6 +215,12 @@ func (h *ContactsHandler) DeleteContact(c echo.Context) error {
 		return h.RedirectToNotFound(c)
 	}
 
+	trigger := c.Request().Header.Get("HX-Trigger")
+	fmt.Println(trigger)
+	if trigger == "delete-btn" {
+		return c.HTML(200, "")
+	}
+
 	return h.RedirectToContacts(c)
 }
 

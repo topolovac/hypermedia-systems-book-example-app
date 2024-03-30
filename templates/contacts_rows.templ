@@ -15,6 +15,16 @@ templ ContactRows(contacts []model.Contact) {
 			<td>
 				<a href={ templ.URL(fmt.Sprintf("/contacts/%d/edit", contact.Id)) }>Edit</a>
 				<a href={ templ.URL(fmt.Sprintf("/contacts/%d", contact.Id)) }>View</a>
+				<a
+					id="delete-btn"
+					href="#"
+					hx-delete={ fmt.Sprintf("/contacts/%d", contact.Id) }
+					hx-target="closest tr"
+					hx-confirm="Are you sure you want to delete this contact?"
+					hx-swap="outerHTML swap:1s"
+				>
+					Delete Contact
+				</a>
 			</td>
 		</tr>
 	}

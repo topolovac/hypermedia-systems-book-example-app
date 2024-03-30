@@ -105,6 +105,11 @@ func Layout() templ.Component {
 			height: 300px;
 			overflow: auto;
 		}
+
+		tr.htmx-swapping { 
+		opacity: 0;
+		transition: opacity 1s ease-out; 
+		}
 		`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 		if templ_7745c5c3_Err != nil {
