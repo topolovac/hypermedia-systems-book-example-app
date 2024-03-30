@@ -224,6 +224,34 @@ func (h *ContactsHandler) DeleteContact(c echo.Context) error {
 	return h.RedirectToContacts(c)
 }
 
+func (h *ContactsHandler) DeleteContacts(c echo.Context) error {
+
+	params, err := c.FormParams()
+	if err != nil {
+		fmt.Println("err:", err)
+		return h.RedirectToNotFound(c)
+	}
+
+	selected_contact_ids := params["selected_contact_ids"]
+	fmt.Println("selected_contact_ids", selected_contact_ids)
+
+	for _, id := range selected_contact_ids {
+		id, err := strconv.Atoi(id)
+		if err != nil {
+			fmt.Println("err:", err)
+			return h.RedirectToNotFound(c)
+		}
+		err = h.contact_service.Delete(id)
+		if err != nil {
+			fmt.Println("err2:", err)
+			return h.RedirectToNotFound(c)
+		}
+	}
+
+	contacts := h.contact_service.All(0)
+	return utils.Render(c, templates.Contacts(contacts, "", 0))
+}
+
 func (h *ContactsHandler) ValidateEmail(c echo.Context) error {
 	email := c.QueryParam("email")
 

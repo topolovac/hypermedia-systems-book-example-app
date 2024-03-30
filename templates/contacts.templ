@@ -24,35 +24,45 @@ templ Contacts(contacts []model.Contact, search_param string, page int) {
 			<img id="spinner" class="htmx-indicator" src="/static/img/spinning-circles.svg" alt="Request In Flight..."/>
 		</form>
 		<div class="table-container">
-			<table>
-				<thead>
-					<tr>
-						<th>First</th>
-						<th>Last</th>
-						<th>Phone</th>
-						<th>Email</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					@ContactRows(contacts)
-					if len(contacts) == 10 {
+			<form>
+				<table>
+					<thead>
 						<tr>
-							<td>
-								<span
-									hx-target="closest tr"
-									hx-swap="outerHTML"
-									hx-trigger="revealed"
-									hx-select="tbody > tr"
-									hx-get={ fmt.Sprintf("/contacts?page=%d", page+1) }
-								>
-									Loading more...
-								</span>
-							</td>
+							<th></th>
+							<th>First</th>
+							<th>Last</th>
+							<th>Phone</th>
+							<th>Email</th>
+							<th></th>
 						</tr>
-					}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						@ContactRows(contacts)
+						if len(contacts) == 10 {
+							<tr>
+								<td>
+									<span
+										hx-target="closest tr"
+										hx-swap="outerHTML"
+										hx-trigger="revealed"
+										hx-select="tbody > tr"
+										hx-get={ fmt.Sprintf("/contacts?page=%d", page+1) }
+									>
+										Loading more...
+									</span>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+				<button
+					hx-post="/contacts/delete"
+					hx-confirm="Are you sure you want to delete contacts?"
+					hx-target="body"
+				>
+					Delete Contacts
+				</button>
+			</form>
 		</div>
 		<p>
 			<a href="/contacts/new">Add Contact</a>

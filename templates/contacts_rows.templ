@@ -2,12 +2,14 @@ package templates
 
 import (
 	"fmt"
+	"strconv"
 	"contact.app/model"
 )
 
 templ ContactRows(contacts []model.Contact) {
 	for _, contact := range contacts {
 		<tr>
+			<td><input type="checkbox" name="selected_contact_ids" value={ strconv.Itoa(int(contact.Id)) }/></td>
 			<td>{ contact.First }</td>
 			<td>{ contact.Last } </td>
 			<td>{ contact.Phone } </td>

@@ -51,7 +51,7 @@ func Contacts(contacts []model.Contact, search_param string, page int) templ.Com
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/contacts\" hx-trigger=\"search, keyup delay:300ms changed\" hx-target=\"tbody\" hx-push-url=\"true\" hx-indicator=\"#spinner\"> <input type=\"submit\" value=\"Search\"> <img id=\"spinner\" class=\"htmx-indicator\" src=\"/static/img/spinning-circles.svg\" alt=\"Request In Flight...\"></form><div class=\"table-container\"><table><thead><tr><th>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/contacts\" hx-trigger=\"search, keyup delay:300ms changed\" hx-target=\"tbody\" hx-push-url=\"true\" hx-indicator=\"#spinner\"> <input type=\"submit\" value=\"Search\"> <img id=\"spinner\" class=\"htmx-indicator\" src=\"/static/img/spinning-circles.svg\" alt=\"Request In Flight...\"></form><div class=\"table-container\"><form><table><thead><tr><th></th><th>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -118,12 +118,21 @@ func Contacts(contacts []model.Contact, search_param string, page int) templ.Com
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table></div><p><a href=\"/contacts/new\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table><button hx-post=\"/contacts/delete\" hx-confirm=\"Are you sure you want to delete contacts?\" hx-target=\"body\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var9 := `Add Contact`
+			templ_7745c5c3_Var9 := `Delete Contacts`
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></form></div><p><a href=\"/contacts/new\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Var10 := `Add Contact`
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var10)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

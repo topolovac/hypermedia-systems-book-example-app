@@ -40,6 +40,8 @@ func main() {
 
 	e.DELETE("/contacts/:id", handler.DeleteContact)
 
+	e.POST("/contacts/delete", handler.DeleteContacts)
+
 	e.GET("/contacts/validate/email", handler.ValidateEmail)
 
 	e.GET("/contacts/count", handler.ContactsCount)
