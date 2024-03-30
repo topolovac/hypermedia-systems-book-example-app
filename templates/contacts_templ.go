@@ -127,7 +127,7 @@ func Contacts(contacts []model.Contact, search_param string, page int) templ.Com
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></p>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a> <span hx-get=\"/contacts/count\" hx-trigger=\"revealed\"><img class=\"htmx-indicator\" src=\"/static/img/spinning-circles.svg\" alt=\"Request In Flight...\"></span></p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

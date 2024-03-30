@@ -51,9 +51,6 @@ func (h *ContactsHandler) OopsView(c echo.Context) error {
 func (h *ContactsHandler) ContactsView(c echo.Context) error {
 	search := c.QueryParam("search")
 
-	// added delay to simulate slower response
-	time.Sleep(500 * time.Millisecond)
-
 	page := 1
 	pp, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
@@ -70,10 +67,17 @@ func (h *ContactsHandler) ContactsView(c echo.Context) error {
 	}
 
 	if c.Request().Header.Get("HX-Trigger") == "search" {
+		// added delay to simulate slower response
+		time.Sleep(500 * time.Millisecond)
 		return utils.Render(c, templates.ContactRows(contacts))
 	}
 
 	return utils.Render(c, templates.Contacts(contacts, search, page))
+}
+
+func (h *ContactsHandler) ContactsCount(c echo.Context) error {
+	count := h.contact_service.GetLength()
+	return c.HTML(200, fmt.Sprintf("<span>(%d)</span>", count))
 }
 
 func (h *ContactsHandler) NewContactView(c echo.Context) error {

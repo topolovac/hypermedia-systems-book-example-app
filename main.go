@@ -42,6 +42,8 @@ func main() {
 
 	e.GET("/contacts/validate/email", handler.ValidateEmail)
 
+	e.GET("/contacts/count", handler.ContactsCount)
+
 	e.RouteNotFound("/", handler.NotFoundView)
 	e.RouteNotFound("/*", handler.NotFoundView)
 

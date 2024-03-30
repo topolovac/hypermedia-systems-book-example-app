@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 	"strings"
+	"time"
 
 	"contact.app/model"
 )
@@ -77,4 +78,9 @@ func (c *ContactService) FindByEmail(email string) (model.Contact, error) {
 		}
 	}
 	return model.Contact{}, errors.New("contact not found")
+}
+
+func (c *ContactService) GetLength() int {
+	time.Sleep(1 * time.Second)
+	return len(c.Contacts)
 }
